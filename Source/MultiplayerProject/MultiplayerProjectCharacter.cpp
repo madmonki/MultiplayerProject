@@ -10,6 +10,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "Engine/StaticMeshActor.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -127,3 +128,20 @@ void AMultiplayerProjectCharacter::Look(const FInputActionValue& Value)
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
 }
+
+void AMultiplayerProjectCharacter::ServerRPCFunction_Implementation()
+{
+	if (HasAuthority())
+	{
+		
+		/*
+		GEngine->AddOnScreenDebugMessage(-1, 5.f,
+		FColor::Red,
+		TEXT("Server: ServerRPCFunction_Implementation"));
+		*/
+
+		GetWorld()->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass());
+		
+	}
+}
+

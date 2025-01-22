@@ -21,6 +21,13 @@ void AMyBox::BeginPlay()
 
 	SetReplicates(true);
 	SetReplicatingMovement(true);
+
+	if (HasAuthority())
+	{
+		GetWorld()->GetTimerManager().
+		SetTimer(TestTimer, this, &AMyBox::DecreaseReplicatedValue,
+			2.f, false);
+	}
 }
 
 // Called every frame
@@ -48,9 +55,41 @@ void AMyBox::Tick(float DeltaTime)
 	
 }
 
+void AMyBox::OnRep_ReplicatedVar()
+{
+	if (HasAuthority())
+	{
+		FVector NewLocation = GetActorLocation() + FVector(0.f, 0.f, 200.f);
+		SetActorLocation(NewLocation);
+		
+		/*GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red,
+		TEXT("Server: OnRep_ReplicatedVar"));*/
+	}
+	else
+	{
+		/*GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green,
+		FString::Printf(TEXT("Client %d: OnRep_ReplicatedVar"), UE::GetPlayInEditorID()));*/
+	}
+}
+
 void AMyBox::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(AMyBox, ReplicatedValue);
+}
+
+void AMyBox::DecreaseReplicatedValue()
+{
+	if (HasAuthority())
+	{
+		ReplicatedValue -= 1.f;
+		OnRep_ReplicatedVar();
+		if (ReplicatedValue > 0.f)
+		{
+			GetWorld()->GetTimerManager().
+			SetTimer(TestTimer, this, &AMyBox::DecreaseReplicatedValue,
+			2.f, false);
+		}
+	}
 }
