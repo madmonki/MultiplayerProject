@@ -35,5 +35,8 @@ public:
 	FTimerHandle TestTimer;
 
 	UFUNCTION(NetMulticast, Reliable)
-	void MulticastRPCExplode();	
+	void MulticastRPCExplode();
+
+	UPROPERTY(EditAnywhere)
+	UParticleSystem* ExplosionEffect;
 };

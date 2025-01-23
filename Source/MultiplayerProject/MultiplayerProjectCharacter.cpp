@@ -148,9 +148,12 @@ void AMultiplayerProjectCharacter::ServerRPCFunction_Implementation(int ArgInt)
 		{
 			return;
 		}
-		
+
+		FActorSpawnParameters SpawnParameters;
+		SpawnParameters.Owner = this;
 		AStaticMeshActor* StaticMeshActor =
-		GetWorld()->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass());
+		GetWorld()->SpawnActor<AStaticMeshActor>(SpawnParameters);
+		// StaticMeshActor->SetOwner(this); this also can be used after spawn.
 		if (StaticMeshActor != nullptr)
 		{
 			StaticMeshActor -> SetReplicates(true);

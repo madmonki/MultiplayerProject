@@ -3,6 +3,7 @@
 
 #include "MyBox.h"
 #include "Net/UnrealNetwork.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AMyBox::AMyBox()
@@ -113,4 +114,15 @@ void AMyBox::MulticastRPCExplode_Implementation()
 		FString::Printf(TEXT("Client: %d MultiRPC!"),
 		UE::GetPlayInEditorID()));
 	}
+
+	if (!IsRunningDedicatedServer())
+	{
+		FVector ExplosionPosition = GetActorLocation() +
+									FVector(0.f, 0.f, 50.f);
+		
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ExplosionEffect,
+			ExplosionPosition, FRotator::ZeroRotator, true,
+			EPSCPoolMethod::AutoRelease);
+	}
+	
 }
