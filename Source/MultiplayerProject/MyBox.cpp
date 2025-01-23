@@ -25,7 +25,7 @@ void AMyBox::BeginPlay()
 	if (HasAuthority())
 	{
 		GetWorld()->GetTimerManager().
-		SetTimer(TestTimer, this, &AMyBox::DecreaseReplicatedValue,
+		SetTimer(TestTimer, this, &AMyBox::MulticastRPCExplode,
 			2.f, false);
 	}
 }
@@ -91,5 +91,26 @@ void AMyBox::DecreaseReplicatedValue()
 			SetTimer(TestTimer, this, &AMyBox::DecreaseReplicatedValue,
 			2.f, false);
 		}
+	}
+}
+
+void AMyBox::MulticastRPCExplode_Implementation()
+{
+	if (HasAuthority())
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f,
+		FColor::Emerald,
+		FString::Printf(TEXT("Server MultiRPC!")));
+
+		GetWorld()->GetTimerManager().
+		SetTimer(TestTimer, this, &AMyBox::MulticastRPCExplode,
+			2.f, false);
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f,
+		FColor::Emerald,
+		FString::Printf(TEXT("Client: %d MultiRPC!"),
+		UE::GetPlayInEditorID()));
 	}
 }

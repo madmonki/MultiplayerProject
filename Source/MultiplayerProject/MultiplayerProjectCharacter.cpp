@@ -129,7 +129,7 @@ void AMultiplayerProjectCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
-void AMultiplayerProjectCharacter::ServerRPCFunction_Implementation()
+void AMultiplayerProjectCharacter::ServerRPCFunction_Implementation(int ArgInt)
 {
 	if (HasAuthority())
 	{
@@ -140,8 +140,50 @@ void AMultiplayerProjectCharacter::ServerRPCFunction_Implementation()
 		TEXT("Server: ServerRPCFunction_Implementation"));
 		*/
 
+		GEngine->AddOnScreenDebugMessage(-1, 5.f,
+		FColor::Red,
+		FString::Printf(TEXT("ArgInt: %i"), ArgInt));
+		
+		if (SphereMesh == nullptr)
+		{
+			return;
+		}
+		
+		AStaticMeshActor* StaticMeshActor =
 		GetWorld()->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass());
+		if (StaticMeshActor != nullptr)
+		{
+			StaticMeshActor -> SetReplicates(true);
+			StaticMeshActor -> SetReplicateMovement(true);
+			StaticMeshActor -> SetMobility(EComponentMobility::Movable);
+			FVector SpawnLocation = GetActorLocation() +
+									GetActorForwardVector() * 100.f +
+									GetActorUpVector() * 50.f;
+			StaticMeshActor -> SetActorLocation(SpawnLocation);
+			UStaticMeshComponent *StaticMeshComponent =
+									StaticMeshActor->GetStaticMeshComponent();
+			if (StaticMeshComponent != nullptr)
+			{
+				StaticMeshComponent -> SetIsReplicated(true);
+				StaticMeshComponent -> SetSimulatePhysics(true);
+				if (SphereMesh != nullptr)
+				{
+					StaticMeshComponent -> SetStaticMesh(SphereMesh);
+				}
+			}
+		}
 		
 	}
 }
+
+bool AMultiplayerProjectCharacter::ServerRPCFunction_Validate(int ArgInt)
+{
+	if (ArgInt >= 0 && ArgInt <= 100)
+	{
+		return true;
+	}
+	
+	return false;
+}
+
 
