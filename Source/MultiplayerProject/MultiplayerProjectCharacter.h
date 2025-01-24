@@ -72,6 +72,12 @@ public:
 	UFUNCTION(Server, Reliable, WithValidation, BlueprintCallable)
 	void ServerRPCFunction(int ArgInt);
 
+	UFUNCTION(Client, Reliable, BlueprintCallable)
+	void ClientRPCFunction();
+
+	UPROPERTY(EditAnywhere)
+	UParticleSystem* ParticleSystem;
+	
 	UPROPERTY(EditAnywhere)
 	UStaticMesh* SphereMesh;
 };

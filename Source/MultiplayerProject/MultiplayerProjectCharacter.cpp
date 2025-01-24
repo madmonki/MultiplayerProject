@@ -11,6 +11,8 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "Engine/StaticMeshActor.h"
+#include "Particles/ParticleSystem.h"
+#include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -189,4 +191,9 @@ bool AMultiplayerProjectCharacter::ServerRPCFunction_Validate(int ArgInt)
 	return false;
 }
 
-
+void AMultiplayerProjectCharacter::ClientRPCFunction_Implementation()
+{
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ParticleSystem,
+		GetActorLocation(), FRotator::ZeroRotator, true,
+		EPSCPoolMethod::AutoRelease);
+}
