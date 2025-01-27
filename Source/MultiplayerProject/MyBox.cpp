@@ -23,12 +23,15 @@ void AMyBox::BeginPlay()
 	SetReplicates(true);
 	SetReplicatingMovement(true);
 
+	/*
 	if (HasAuthority())
 	{
 		GetWorld()->GetTimerManager().
 		SetTimer(TestTimer, this, &AMyBox::MulticastRPCExplode,
 			2.f, false);
 	}
+	*/
+	
 }
 
 // Called every frame
