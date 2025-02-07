@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Interfaces/OnlineSessionInterface.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "MultiplayerSessionsSubsystem.generated.h"
 
@@ -18,4 +19,6 @@ class MULTIPLAYERPROJECT_API UMultiplayerSessionsSubsystem : public UGameInstanc
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	virtual void Deinitialize() override;
 	void PrintString(const FString& String);
+	
+	IOnlineSessionPtr SessionInterface;
 };
