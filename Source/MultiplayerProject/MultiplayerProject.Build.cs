@@ -10,6 +10,8 @@ public class MultiplayerProject : ModuleRules
 
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", 
 			"CoreUObject", "Engine", "InputCore", "EnhancedInput", 
-			"OnlineSubsystem", "OnlineSubsystemSteam" });
+			"OnlineSubsystem",
+			"OnlineSubsystemSteam"
+		});
 	}
 }
